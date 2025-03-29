@@ -1,0 +1,919 @@
+ //created on: 24-oct-2024
+package rules
+
+//list any import classes here.
+
+import dsi.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+global java.util.List<Condicion> conditions;
+global java.util.List<Meta> objetivos;
+global java.util.LinkedList<String> diario;
+
+rule "Inicializar Hechos"
+agenda-group "Iniciar"
+	when
+		
+	then
+		List<Condicion> condiciones = conditions;
+		List<Meta> metas = objetivos;
+
+		
+		Objeto escudo = new Objeto("EscudoBronce", "EvitarPetrificacion");
+		Objeto espejo = new Objeto("EscudoEspejo", "Reflectar");
+		Objeto hoz = new Objeto("HozAcero", "CortarCabezaMedusa");
+		Objeto casco = new Objeto("CascoHades", "Invisibilidad");
+		Objeto ojosGrayas = new Objeto("OjosGrayas", "IntercambioGrayas");
+		Objeto zurron = new Objeto("ZurronMagico", "GuardarCabezaMedusa"); 
+		Objeto sandalias = new Objeto("SandaliasAladas", "Volar");
+		Objeto cabeza = new Objeto("CabezaMedusa", "Petrificar");
+		Objeto anillo = new Objeto("AnilloInvisibilidad", "Invisibilidad");
+		Objeto espejoMano = new Objeto("EspejoMano", "Reflectar");
+		Objeto conjuro = new Objeto("ConjuroVuelo", "Volar");
+		Objeto espadaCaos = new Objeto("EspadaCaos", "MatarMinotauro");
+		Objeto hiloMagico = new Objeto("HiloMagico", "UbicarseEnLaberinto");
+		Objeto alasCera = new Objeto("AlasCera", "Volar");
+		Objeto joyaCeto = new Objeto("JoyaValiosa", "IntercambioMinos");
+		Objeto cuernoMinotauro = new Objeto("CuernoMinotauro", "Electrificar");
+		
+		
+		Ser s1 = new Ser("Ceto", "preso");
+		Ser s2 = new Ser("Andromeda", "libre");
+		Ser s3 = new Ser("Poseidon", "libre");
+		Ser s4 = new Ser("Casiopea", "libre");
+		Ser s7 = new Ser("Atenea", "libre");
+		
+		Ser s9 = new Ser("Hefesto", "libre");
+		Ser s10 = new Ser("Hermes", "libre");
+		Ser s11 = new Ser("Hades", "libre");
+		Ser s12 = new Ser("Grayas", "libre");
+		Ser s13 = new Ser("Ninfas", "libre");
+		Ser s14 = new Ser("Medusa", "viva");
+		Ser s15 = new Ser("Minotauro", "encerrado");
+		Ser s16 = new Ser("Dedalo", "libre");
+		Ser s17 = new Ser("Icaro", "libre");
+		Ser s18 = new Ser("Minos", "libre");
+		Ser s19 = new Ser("Piritoo", "desconocido");
+		
+		TenerTiene t1 = new TenerTiene(escudo, s7);
+		TenerTiene t2 = new TenerTiene(hoz, s10);
+		TenerTiene t4 = new TenerTiene(casco, s11);
+		TenerTiene t5 = new TenerTiene(ojosGrayas, s12);
+		TenerTiene t6 = new TenerTiene(zurron, s13);
+		TenerTiene t7 = new TenerTiene(sandalias, s13);
+		TenerTiene t8 = new TenerTiene(cuernoMinotauro, s15);
+		 
+		
+		ArrayList<Ser> seres = new ArrayList<>();
+		Collections.addAll(seres, s1, s2, s3, s4, s7, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19);
+		
+		for (Meta m : metas){ 
+			insert(m);
+				    Ser receptor = null;
+			    Ser emisor = null;
+	
+			    // Busca el emisor y receptor en la lista existente
+			    for (Ser a : seres) {
+			        if (m.getSujeto().equals(a.getNombre())) {
+			            emisor = a;
+			            break;
+			        }
+			    }
+	
+			    if (emisor == null) {
+			        emisor = new Ser(m.getSujeto(), "libre");
+			        seres.add(emisor); // Añadir a la lista de seres
+			        insert(emisor); // Insertar en la sesión
+			    }
+	
+			    for (Ser b : seres) {
+			        if (m.getObjeto().equals(b.getNombre())) {
+			            receptor = b;
+			            break;
+			        }
+			    }
+	
+			    if (receptor == null) {
+			        receptor = new Ser(m.getObjeto(), "libre");
+			        seres.add(receptor);
+			        insert(receptor);
+			    }
+			
+		}
+		for (Ser s : seres) insert(s);
+		
+		for (Condicion c : condiciones) {
+			insert(c);
+		    Ser receptor = null;
+		    Ser emisor = null;
+
+		    // Busca el emisor y receptor en la lista existente
+		    for (Ser a : seres) {
+		        if (c.getEmisor().equals(a.getNombre())) {
+		            emisor = a;
+		            break;
+		        }
+		    }
+
+		    if (emisor == null) {
+		        emisor = new Ser(c.getEmisor(), "libre");
+		        seres.add(emisor); // Añadir a la lista de seres
+		        insert(emisor); // Insertar en la sesión
+		    }
+
+		    for (Ser b : seres) {
+		        if (c.getReceptor().equals(b.getNombre())) {
+		            receptor = b;
+		            break;
+		        }
+		    }
+
+		    if (receptor == null) {
+		        receptor = new Ser(c.getReceptor(), "libre");
+		        seres.add(receptor);
+		        insert(receptor);
+		    }
+		   
+		    }
+		
+		insert(escudo);
+		insert(espejo);
+		insert(hoz);
+		insert(casco);
+		insert(ojosGrayas);
+		insert(zurron);
+		insert(sandalias);
+		insert(cabeza);
+		insert(anillo);
+		insert(conjuro);
+		insert(espejoMano);
+		insert(espadaCaos);
+		insert(hiloMagico);
+		insert(joyaCeto);
+		insert(alasCera);
+		insert(cuernoMinotauro);
+		insert(t1);
+		insert(t2);
+		insert(t4);
+		insert(t5);
+		insert(t6);
+		insert(t7);
+		insert(t8);
+		
+		drools.getKieRuntime().getAgenda().getAgendaGroup("Condiciones").setFocus();
+end
+
+//REGLAS CONDICIONES
+
+rule "X apresa Y"
+agenda-group "Condiciones"
+	when
+		$condicion: Condicion(tipo == "apresa")
+		$emisor: Ser(nombre == $condicion.getEmisor())
+		$receptor: Ser(nombre == $condicion.getReceptor())
+	then
+		modify($receptor){setEstado("preso")};
+		insert(new Apresar($emisor, $receptor));
+		diario.add($emisor.getNombre()+ " apresa a " + $receptor.getNombre());
+end
+
+rule "Obtener favor Atenea"
+agenda-group "Condiciones"
+	when
+		$condicion: Condicion(emisor == "Atenea", tipo == "favor")
+		$heroe: Ser(nombre==$condicion.getReceptor(), estado != "preso")
+		$atenea: Ser(nombre == "Atenea")
+		not(Favor(emisor == $atenea, receptor == $heroe))
+	then
+		insert(new Favor($atenea, $heroe));
+		
+end
+
+rule "Obtener favor Hades"
+agenda-group "Condiciones"
+	when
+		$condicion: Condicion(emisor == "Hades", tipo == "favor")
+		$heroe: Ser(nombre==$condicion.getReceptor(), estado != "preso")
+		$dios: Ser(nombre == "Hades")
+		not(Favor(emisor == $dios, receptor == $heroe))
+	then
+		insert(new Favor($dios, $heroe));
+		
+end
+
+
+rule "Obtener favor Hermes"
+agenda-group "Condiciones"
+	when
+		$condicion: Condicion(emisor == "Hermes", tipo == "favor")
+		$heroe: Ser(nombre==$condicion.getReceptor(), estado != "preso")
+		$dios: Ser(nombre == "Hermes")
+		not(Favor(emisor == $dios, receptor == $heroe))
+	then
+		insert(new Favor($dios, $heroe));
+		
+end
+
+
+rule "Obtener favor Hefesto"
+agenda-group "Condiciones"
+	when
+		$condicion: Condicion(emisor == "Hefesto", tipo == "favor")
+		$heroe: Ser(nombre==$condicion.getReceptor(), estado != "preso")
+		$dios: Ser(nombre == "Hefesto")
+		not(Favor(emisor == $dios, receptor == $heroe))
+	then
+		insert(new Favor($dios, $heroe));
+		
+end
+
+rule "Enojar a Poseidon"
+agenda-group "Condiciones"
+	when
+		$condicion: Condicion( tipo == "enojo", emisor == "Poseidon", receptor == "Casiopea")
+		$dios: Ser(nombre == "Poseidon")
+		$receptor: Ser(nombre == $condicion.getReceptor())
+		not(Enfadar(emisor == $dios, receptor == $receptor))
+	then
+		modify($dios){setEstado("enojado")};
+		insert(new Enfadar($dios, $receptor));
+		
+end
+
+rule "Ser NO tiene objeto"
+agenda-group "Condiciones"
+	when
+		$condicion: Condicion(tipo == "no tiene")
+		$propietario: Ser(nombre == $condicion.getEmisor())
+		$objeto: Objeto(nombre==$condicion.getReceptor())
+		$relacion: TenerTiene(objeto == $objeto, propietario == $propietario)
+	then
+		retract($relacion);
+		
+end
+
+rule "Ser SI tiene objeto"
+agenda-group "Condiciones"
+	when
+		$condicion: Condicion(tipo == "tiene")
+		$propietario: Ser(nombre == $condicion.getEmisor())
+		$objeto: Objeto(nombre==$condicion.getReceptor())
+		not(TenerTiene(objeto == $objeto, propietario == $propietario))
+		
+	then
+		insert(new TenerTiene($objeto, $propietario));
+end
+
+
+
+
+rule "X mata Y"
+agenda-group "Condiciones"
+	when
+		$condicion: Condicion(tipo == "mata")
+		$emisor: Ser(nombre == $condicion.getEmisor())
+		$receptor: Ser(nombre == $condicion.getReceptor())
+	then
+		modify($receptor){setEstado("muerto")};
+		insert(new Matar($emisor, $receptor));
+		
+end
+
+//REGLAS DE EVALUACIÓN
+
+rule "Evaluar Meta Matar"
+    when
+
+		$meta: Meta($sujeto: sujeto, $objeto: objeto, accion == "matar")
+        $serSujeto: Ser(nombre == $sujeto)
+        $serObjeto: Ser(nombre == $objeto)
+       
+        exists Matar(emisor == $serSujeto, receptor == $serObjeto)
+        
+        
+    then
+        System.out.println("Sí, " + $meta.getSujeto() + " puede " + $meta.getAccion() + " " + $meta.getObjeto());
+        modify($meta){setCumplida(true)};
+        diario.forEach(System.out::println);
+        
+        drools.getKieRuntime().halt();
+end
+
+rule "Evaluar Meta Liberar"
+    when
+
+		$meta: Meta($sujeto: sujeto, $objeto: objeto, accion == "liberar")
+        $serSujeto: Ser(nombre == $sujeto)
+        $serObjeto: Ser(nombre == $objeto)
+        
+        exists Liberar(emisor == $serSujeto, receptor == $serObjeto)
+        
+        
+    then
+        System.out.println("Sí, " + $meta.getSujeto() + " puede " + $meta.getAccion() + " " + $meta.getObjeto());
+        modify($meta){setCumplida(true)};
+        diario.forEach(System.out::println);
+        drools.getKieRuntime().halt();
+end
+
+
+
+
+rule "Evaluar Meta Capacidad"
+    when
+
+		$meta: Meta($sujeto: sujeto, $objeto: objeto, accion == "tener")
+        $serSujeto: Ser(nombre == $sujeto, habilidades contains $objeto)
+       
+        
+        
+    then
+        System.out.println("Sí, " + $meta.getSujeto() + " puede " + $meta.getAccion() + " " + $meta.getObjeto());
+        modify($meta){setCumplida(true)};
+       	diario.forEach(System.out::println);
+        drools.getKieRuntime().halt();
+       	
+end
+
+rule "Informar Meta No Cumplida"
+    salience -1000
+    when
+        $meta: Meta(cumplida == false)
+    then
+        System.out.println("No, no se encuentra forma de que " + $meta.getSujeto() + " pueda " + $meta.getAccion() + " " + $meta.getObjeto());
+end
+
+
+
+//REGLAS INTERMEDIAS
+
+rule "Liberar apresados"
+	when
+		$emisor: Ser (nombre != "Heracles")
+		Matar(emisor == $emisor, $receptor : receptor)
+		Apresar(emisor == $receptor, $preso : receptor)
+		
+		
+	then
+		modify($preso){setEstado("libre")};
+		insert(new Liberar($emisor, $preso));
+		diario.add($emisor.getNombre() + " libera a " + $preso.getNombre() + " debido a matar a " + $receptor.getNombre() + ".");
+end
+
+rule "Ceto es liberado"
+    when
+        $casiopea: Ser(nombre == "Casiopea")
+        $poseidon: Ser(nombre == "Poseidon", estado == "enojado")
+        Enfadar(emisor == $poseidon, receptor == $casiopea)
+        $ceto: Ser(nombre == "Ceto")
+    then
+    	insertLogical(new Liberar($poseidon, $ceto));
+        modify($ceto){setEstado("libre")};
+        diario.add("Ceto queda libre debido al enojo de Poseidon hacia Casiopea.");
+end
+
+
+
+
+rule "Andromeda es apresada"
+    when
+        $ceto: Ser(nombre == "Ceto", estado == "libre")
+        $andromeda: Ser(nombre == "Andromeda")
+    then
+        insertLogical(new Apresar($ceto, $andromeda));
+        modify($andromeda){setEstado("presa")}
+        diario.add("Andromeda queda presa debido a estar Ceto libre.");
+
+end
+
+
+
+rule "Heroe obtiene Escudo de Bronce"
+    
+    when
+    	$atenea: Ser(nombre == "Atenea")
+        $favor: Favor(emisor == $atenea)
+        $heroe: Ser(nombre == $favor.getReceptor().getNombre())
+        $escudo: Objeto(nombre == "EscudoBronce")
+        $relacionEscudo: TenerTiene(objeto == $escudo, propietario == $atenea)
+    then
+        modify($relacionEscudo){setPropietario($heroe)};
+        diario.add($heroe.getNombre() + " obtiene Escudo de Bronce debido a tener el favor de Atenea.");
+
+end
+
+rule "Heroe obtiene Hoz de Acero"
+    
+    when
+        $hermes: Ser(nombre == "Hermes")
+        $favor: Favor(emisor == $hermes)
+        $heroe: Ser(nombre == $favor.getReceptor().getNombre())
+        $hoz: Objeto(nombre == "HozAcero")
+        $relacionHoz: TenerTiene(objeto == $hoz, propietario == $hermes)
+    then
+    	modify($relacionHoz){setPropietario($heroe)};
+        diario.add($heroe.getNombre() +" obtiene Hoz de Acero debido a tener el favor de Hermes.");
+
+end
+
+rule "Heroe obtiene Escudo-Espejo"
+    
+    when
+        
+        $hefesto: Ser(nombre == "Hefesto")
+        $favor: Favor(emisor == $hefesto)
+        $heroe: Ser(nombre == $favor.getReceptor().getNombre())
+        $espejo: Objeto(nombre == "EscudoEspejo")
+        $escudo: Objeto(nombre == "EscudoBronce")
+        TenerTiene(objeto == $escudo, propietario == $heroe)
+    then
+    
+    	insert(new TenerTiene($espejo,$heroe));
+        diario.add($heroe.getNombre() + " obtiene Escudo-Espejo debido a tener el favor de Hefesto y el Escudo de Bronce.");
+
+end
+
+rule "Heroe obtiene Capacidad Espejo"
+    
+ when
+ 
+        $objeto: Objeto(nombre in ( "EscudoEspejo" , "EspejoMano" ))
+        $relacion: TenerTiene(objeto == $objeto)
+        $heroe: Ser(nombre == $relacion.getPropietario().getNombre())
+  then
+    
+        modify($heroe) {
+            getHabilidades().add($objeto.getUtilidad());
+        }
+        
+        diario.add($heroe.getNombre() + " obtiene Capacidad Reflectante debido a tener " 
+            +  $objeto.getNombre() + ".");
+
+end
+
+rule "Heroe obtiene Casco Hades"
+    
+   when
+        $hades: Ser(nombre == "Hades")
+        $favor: Favor(emisor == $hades)
+        $heroe: Ser(nombre == $favor.getReceptor().getNombre())
+        $casco: Objeto(nombre == "CascoHades")
+        $relacion: TenerTiene(objeto == $casco, propietario == $hades)
+    then
+    	modify($relacion){setPropietario($heroe)};
+        diario.add( $heroe.getNombre() + " obtiene Casco de Hades debido a tener el favor de Hades.");
+
+end
+
+rule "Heroe obtiene Capacidad Invisibilidad 1"
+  
+     
+ when
+ 		$heroe: Ser()
+        $objeto: Objeto(nombre in ( "CascoHades" , "AnilloInvisibilidad" ))
+        $relacion: TenerTiene(objeto == $objeto, propietario == $heroe)
+  then
+    
+        modify($heroe) {
+            getHabilidades().add($objeto.getUtilidad());
+        }
+        
+        diario.add($heroe.getNombre() + " obtiene Capacidad Invisibilidad debido a tener " 
+            +  $objeto.getNombre() + ".");
+
+end
+
+
+rule "Heroe localiza Grayas"
+
+    when
+        $heroe: Ser()
+        $hermes: Ser(nombre == "Hermes")
+        $atenea: Ser(nombre == "Atenea")
+        $grayas: Ser(nombre == "Grayas")
+        Favor(emisor == $hermes, receptor == $heroe)
+        Favor(emisor == $atenea, receptor == $heroe)
+    then
+        insert(new Localizar($heroe, $grayas));
+        modify($grayas){setEstado("localizada")}
+        diario.add($heroe.getNombre() + " localiza a las Grayas debido a tener el favor de Hermes y Atenea.");
+
+end
+
+
+rule "Heroe obtiene Ojo/diente Grayas"
+
+    when
+        $grayas: Ser(nombre == "Grayas")    
+        $heroe: Ser(habilidades contains "Invisibilidad")
+        Localizar(emisor== $heroe, receptor ==$grayas)
+        $ojos: Objeto(nombre == "OjosGrayas")
+        $relacionOjos: TenerTiene(objeto == $ojos, propietario == $grayas)
+        $ninfas: Ser(nombre == "Ninfas", estado == "libre")
+    then
+    	insertLogical(new Robar($heroe, $grayas));
+    	modify($relacionOjos){setPropietario($heroe)};
+    	modify($heroe){getHabilidades().add($ojos.getUtilidad())};
+        diario.add($heroe.getNombre() +" obtiene (roba) el ojo/diente de las Grayas debido a tener Invisibilidad y las Grayas localizadas.");
+
+end
+
+
+rule "Heroe localiza Ninfas"
+    
+    when
+        $heroe: Ser(nombre != "Grayas")
+        $grayas: Ser(nombre == "Grayas")
+        $ojos: Objeto(nombre == "OjosGrayas")
+        $relacionOjos: TenerTiene(objeto == $ojos, propietario == $heroe)
+        $ninfas: Ser(nombre == "Ninfas", estado == "libre")
+        
+    then
+    	insert(new Dar($heroe, $grayas));
+    	modify($relacionOjos){setPropietario($grayas)};
+    	insert(new Localizar($heroe, $ninfas));
+    	modify($ninfas){setEstado("localizada")};
+        diario.add($heroe.getNombre() + " localiza a las Ninfas debido a intercambio de Ojo/Diente de las Grayas, a las Grayas.");
+
+end
+
+rule "Heroe obtiene Zurron Magico"
+    
+    when
+       	$heroe: Ser()
+       	$ninfas: Ser(nombre == "Ninfas", estado == "localizada")
+       	$localiza: Localizar(emisor == $heroe, receptor == $ninfas)
+       	$zurron: Objeto(nombre == "ZurronMagico")
+       	$relacionZurron: TenerTiene(objeto == $zurron, propietario == $ninfas)
+    then
+        modify($relacionZurron){setPropietario($heroe)}
+        diario.add($heroe.getNombre() + " obtiene Zurron Magico debido a las Ninfas localizada.");
+
+end
+
+
+rule "Heroe obtiene Sandalias Aladas"
+    
+   when
+       	$heroe: Ser()
+       	$ninfas: Ser(nombre == "Ninfas", estado == "localizada")
+       	$localiza: Localizar(emisor == $heroe, receptor == $ninfas)
+       	$sandalias: Objeto(nombre == "SandaliasAladas")
+       	$relacionSandalias: TenerTiene(objeto == $sandalias, propietario == $ninfas)
+    then
+        modify($relacionSandalias){setPropietario($heroe)}
+        diario.add($heroe.getNombre() +" obtiene Sandalias Aladas debido a las Ninfas localizada.");
+
+end
+
+rule "Heroe obtiene Capacidad Vuelo"
+    
+	  when
+	 		$heroe: Ser()
+	        $objeto: Objeto(nombre in ( "SandaliasAladas" , "ConjuroVuelo", "AlasCera" ))
+	        $relacion: TenerTiene(objeto == $objeto, propietario == $heroe)
+	  then
+	    
+	        modify($heroe) {
+	            getHabilidades().add($objeto.getUtilidad());
+	        }
+	        
+	        diario.add($heroe.getNombre() + " obtiene Capacidad Vuelo debido a tener " 
+	            +  $objeto.getNombre() + ".");
+
+end
+
+rule "Heroe mata a Medusa"
+    
+    when
+       	$heroe: Ser($habilidades: habilidades)
+        eval($habilidades.contains("Invisibilidad"))
+        eval($habilidades.contains("Volar"))
+        eval($habilidades.contains("Reflectar"))
+        $medusa: Ser(nombre == "Medusa", estado == "viva")
+        $hoz: Objeto(nombre == "HozAcero")
+     	TenerTiene(objeto == $hoz, propietario == $heroe)
+    then
+    	insert(new Matar($heroe, $medusa));
+    	modify($medusa){setEstado("muerta")};
+        diario.add($heroe.getNombre() + " mata a Medusa debido a tener Hoz de Acero, Espejo, Invisibilidad y Vuelo.");
+
+end
+
+rule "Heroe obtiene cabeza de Medusa"
+    
+    when
+        $heroe: Ser()
+        $medusa: Ser(nombre == "Medusa", estado == "muerta")
+        $matar: Matar(emisor == $heroe, receptor == $medusa)
+       	$cabeza: Objeto(nombre == "CabezaMedusa")
+       	$zurron: Objeto(nombre == "ZurronMagico")
+       	$relacionZurron: TenerTiene(objeto == $zurron, propietario == $heroe)    
+    then
+    	insert(new TenerTiene($cabeza,$heroe));
+        diario.add($heroe.getNombre() + " obtiene cabeza de Medusa debido a matar a Medusa.");
+end
+
+
+rule "Heroe mata a Ceto"
+    
+    when
+        $heroe: Ser(estado != "muerto")
+        $ceto: Ser(nombre == "Ceto", estado == "libre")
+        $cabeza: Objeto(nombre == "CabezaMedusa")
+        TenerTiene(objeto == $cabeza, propietario == $heroe)
+    then
+    	insert(new Matar($heroe, $ceto));
+    	modify($ceto){setEstado("muerto")};
+    	Objeto joya = new Objeto("JoyaValiosa", "IntercambioMinos");
+        insert(joya);
+        insert(new TenerTiene(joya, $heroe));
+        diario.add($heroe.getNombre() + " mata a Ceto debido a tener Cabeza de Medusa.");
+
+end
+
+rule "Heroe libera a Andromeda (3 cabezas)"
+salience -99
+    when
+        $heroe: Ser()
+        $andromeda: Ser(nombre == "Andromeda", estado == "presa")
+        $cabezaCeto: Objeto(nombre == "JoyaValiosa")
+        $cabezaMinotauro: Objeto(nombre == "CuernoMinotauro")
+        $cabezaMedusa: Objeto(nombre == "CabezaMedusa")
+        $rCeto: TenerTiene(objeto == $cabezaCeto, propietario == $heroe)
+        $rMedusa: TenerTiene(objeto == $cabezaMedusa, propietario == $heroe)
+        $rMinotauro: TenerTiene(objeto == $cabezaMinotauro, propietario == $heroe)
+       
+    then
+    	insert(new Liberar($heroe, $andromeda));
+    	modify($andromeda){setEstado("libre")};
+        diario.add($heroe.getNombre() +" libera a Andromeda debido a tener las tres cabezas de las criaturas: Medusa, Ceto y Minotauro.");
+
+end
+
+rule "Heroe libera a Andromeda"
+    salience -100
+    when
+        $heroe: Ser(nombre != "Heracles")
+        $ceto: Ser(nombre == "Ceto", estado == "muerto")
+        $matar: Matar(emisor == $heroe, receptor == $ceto)
+        $andromeda: Ser(nombre == "Andromeda", estado == "presa")
+       
+    then
+    	insert(new Liberar($heroe, $andromeda));
+    	modify($andromeda){setEstado("libre")};
+        diario.add($heroe.getNombre() +" libera a Andromeda debido a matar a Ceto.");
+
+end
+
+rule "X se enamora de Y"
+	when
+		 Condicion($emisor: emisor, $receptor: receptor, tipo == "amor")
+		 $enamorada: Ser(nombre == $emisor)
+	then
+		 modify($enamorada){setEstado("enamorada")};
+end
+
+rule "Teseo obtiene ayuda de Ariadna"
+
+    when
+        $teseo: Ser(nombre == "Teseo")
+        $ariadna: Ser(nombre == "Ariadna", estado == "enamorada")
+        $hilo: Objeto(nombre == "HiloMagico")
+        $espada: Objeto(nombre == "EspadaCaos")
+        $relacionHilo: TenerTiene(objeto == $hilo, propietario == $ariadna)
+        $relacionEspada: TenerTiene(objeto == $espada, propietario == $ariadna)
+
+    then
+        modify($relacionHilo){setPropietario($teseo)}
+        modify($relacionEspada){setPropietario($teseo)}
+        diario.add("Teseo obtiene HiloMagico y EspadaCaos debido a recibir la ayuda de Ariadna.");
+
+end
+
+
+
+
+rule "Teseo mata Minotauro"
+
+    when
+        $teseo: Ser(nombre == "Teseo")
+        $minotauro: Ser(nombre == "Minotauro", estado == "encerrado")
+        $hilo: Objeto(nombre == "HiloMagico")
+        $espada: Objeto(nombre == "EspadaCaos")
+        TenerTiene(objeto == $hilo, propietario == $teseo)
+        TenerTiene(objeto == $espada, propietario == $teseo)
+
+    then
+        insert(new Matar($teseo, $minotauro));
+        modify($minotauro){setEstado("muerto")};
+        diario.add("Teseo mata a Minotauro debido tener HiloMagico y EspadaCaos.");
+
+end
+
+
+rule "Teseo obtiene CuernoMinotauro"
+
+    when
+        $teseo: Ser(nombre == "Teseo")
+        $minotauro: Ser(nombre == "Minotauro", estado == "muerto")
+        $cuerno: Objeto(nombre == "CuernoMinotauro")
+        $relacionCuerno: TenerTiene(objeto == $cuerno, propietario == $minotauro)
+
+    then
+        modify($relacionCuerno){setPropietario($teseo)}
+        diario.add("Teseo obtiene CuernoMinotauro debido a matar a Minotauro.");
+
+end
+
+rule "Minos enfadado"
+
+    when
+        $minotauro: Ser(nombre == "Minotauro", estado == "muerto")
+        $dedalo: Ser(nombre == "Dedalo")
+        $icaro: Ser(nombre == "Icaro")
+        $minos: Ser(nombre == "Minos")
+
+    then
+        modify($minos){setEstado("enfadado")}
+        modify($dedalo){setEstado("encerrado")}
+        modify($icaro){setEstado("encerrado")}
+        diario.add("Dedalo e Icaro son encerrados debido al enfado de Minos.");
+
+end
+
+rule "Teseo e Ariadna escondidos"
+
+    when
+        $minos: Ser(nombre == "Minos", estado == "enfadado")
+        $teseo: Ser(nombre == "Teseo")
+        $ariadna: Ser(nombre == "Ariadna")
+
+    then
+        modify($teseo){setEstado("escondido")}
+        modify($ariadna){setEstado("escondido")}
+        diario.add("Teseo y Ariadna se esconden debido al enfado de Minos.");
+
+end
+
+rule "Dedalo fabrica alasCera"
+
+    when
+        $dedalo: Ser(nombre == "Dedalo", estado == "encerrado")
+        $icaro: Ser(nombre == "Icaro", estado == "encerrado")
+
+
+    then
+        Objeto alasCera = new Objeto("AlasCera", "Volar");
+        insert(alasCera);
+        insert(new TenerTiene(alasCera, $icaro));
+        insert(new TenerTiene(alasCera, $dedalo));
+        
+        diario.add("Dedalo fabrica AlasCera para escapar del laberinto.");
+
+end
+
+
+
+rule "Icaro muere"
+
+    when
+        $dedalo: Ser(nombre == "Dedalo", estado == "encerrado")
+        $icaro: Ser(nombre == "Icaro", estado == "encerrado")
+        $alasCera: Objeto(nombre == "AlasCera")
+        $relacionAlas: TenerTiene(objeto == $alasCera, propietario == $icaro) 
+
+    then
+        modify($icaro){setEstado("muerto")};
+        modify($dedalo){setEstado("libre")};
+        diario.add("Icaro muere al acercarse demasiado al Sol y Dedalo escapa del laberinto.");
+
+end
+
+rule "Dedalo ayuda a Perseo" 
+
+	when
+		$perseo: Ser(nombre == "Perseo")
+		$dedalo: Ser(nombre == "Dedalo", estado == "libre")
+		$icaro: Ser(nombre == "Icaro", estado == "muerto")
+		$alasCera: Objeto(nombre == "AlasCera")
+        $relacionAlas: TenerTiene(objeto == $alasCera, propietario == $dedalo)
+	then
+		modify($relacionAlas){setPropietario($perseo)};
+		diario.add("Perseo obtiene alasCera gracias a la ayuda de Dedalo.");
+end
+
+rule "Perseo pide ayuda a Hades"
+
+	when
+		$perseo: Ser(nombre == "Perseo")
+		$hades: Ser(nombre == "Hades")
+		$piritoo: Ser(nombre == "Piritoo", estado == "desconocido")
+		$casco: Objeto(nombre == "CascoHades")
+		$relacionCasco: TenerTiene(objeto == $casco, propietario == $perseo)
+		$favor: Favor(emisor == $hades, receptor == $perseo)
+	then
+		modify($relacionCasco){setPropietario($hades)};
+		modify($piritoo){setEstado("localizada")};
+		delete($favor);
+		diario.add("Hades ayuda a Perseo localizando a Piritoo a cambio de su casco.");
+end
+
+rule "Perseo localiza Teseo" 
+
+	when
+		$perseo: Ser(nombre == "Perseo", estado != "muerto")
+		$teseo: Ser(nombre == "Teseo", estado == "escondido")
+		$alasCera: Objeto(nombre == "AlasCera")
+		$cuerno: Objeto(nombre == "CuernoMinotauro")
+		$relacionAlas: TenerTiene(objeto == $alasCera, propietario == $perseo)
+        $relacionCuerno: TenerTiene(objeto == $cuerno, propietario == $teseo)
+	then
+		modify($relacionCuerno){setPropietario($perseo)};
+		diario.add("Teseo da el Cuerno del Minotauro a Perseo para ayudarle a liberar a Andromeda.");
+end
+
+rule "Perseo mata a Ceto (alternativo)"
+    
+    when
+        $perseo: Ser(nombre == "Perseo")
+        $ceto: Ser(nombre == "Ceto", estado == "libre")
+        $alasCera: Objeto(nombre == "AlasCera")
+		$cuerno: Objeto(nombre == "CuernoMinotauro")
+		$relacionAlas: TenerTiene(objeto == $alasCera, propietario == $perseo)
+        $relacionCuerno: TenerTiene(objeto == $cuerno, propietario == $perseo)
+    then
+    	insert(new Matar($perseo, $ceto));
+    	modify($ceto){setEstado("muerto")};
+    	Objeto joya = new Objeto("JoyaValiosa", "IntercambioMinos");
+        insert(joya);
+        insert(new TenerTiene(joya, $perseo));
+        diario.add("Perseo mata a Ceto debido a tener el Cuerno del Minotauro y las Alas de Cera, y obtiene la Joya de Ceto.");
+end
+
+rule "Perseo da JoyaValiosa a Teseo"
+	salience 2
+	when
+		$perseo: Ser(nombre == "Perseo")
+		$teseo: Ser(nombre == "Teseo", estado == "escondido")
+		$joya: Objeto(nombre == "JoyaValiosa")
+		$relacionJoya: TenerTiene(objeto == $joya, propietario == $perseo)
+	then
+		modify($relacionJoya){setPropietario($teseo)};
+		diario.add("Perseo regala la JoyaValiosa a Teseo como muestra de gratitud.");
+end
+
+rule "Minos perdona a Teseo"
+	salience 2
+	when
+		$teseo: Ser(nombre == "Teseo", estado == "escondido")
+		$minos: Ser(nombre == "Minos", estado == "enfadado")
+		$joya: Objeto(nombre == "JoyaValiosa")
+		$relacionJoya: TenerTiene(objeto == $joya, propietario == $teseo)
+	then
+		modify($relacionJoya){setPropietario($minos)};
+		modify($teseo){setEstado("libre")};
+		modify($minos){setEstado("feliz")};
+		diario.add("Minos perdona a Teseo debido a regalarle la JoyaValiosa.");
+end
+
+rule "Heracles Mata a Perseo"
+salience 10
+	when
+		$perseo: Ser(nombre == "Perseo")
+		$hercules: Ser(nombre == "Heracles")
+		$cabezaMedusa: Objeto(nombre == "CabezaMedusa")
+        $relacionCabeza : TenerTiene(objeto == $cabezaMedusa , propietario == $perseo)
+        
+	then
+		modify($perseo){setEstado("muerto")};
+		modify($relacionCabeza){setPropietario($hercules)};
+		diario.add("Heracles mata a Perseo porque esta enamorado de Andromeda y le roba la cabeza de Medusa.");
+end
+rule "Heracles Mata a Teseo"
+salience 10
+	when
+		$teseo: Ser(nombre == "Teseo")
+		$hercules: Ser(nombre == "Heracles")
+		$cabezaMedusa: Objeto(nombre == "CabezaMedusa")
+		$joya: Objeto(nombre == "JoyaValiosa")
+		$relacionJoya: TenerTiene(objeto == $joya, propietario == $hercules)
+		$cuerno: Objeto(nombre == "CuernoMinotauro")
+        $relacionCuerno: TenerTiene(objeto == $cuerno, propietario == $teseo)
+        TenerTiene(objeto == $cabezaMedusa , propietario == $hercules)
+	then
+		modify($teseo){setEstado("muerto")};
+		modify($relacionJoya){setPropietario($hercules)};
+		modify($relacionCuerno){setPropietario($hercules)};
+		diario.add("Heracles mata a Teseo petrificandolo y le roba la cabeza de  Minotauro.");
+end
+
+
+
+
+
+
+
+
